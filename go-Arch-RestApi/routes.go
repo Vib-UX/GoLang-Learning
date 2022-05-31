@@ -9,7 +9,7 @@ import (
 	"./repository"
 )
 
-var repo repository.PostRepository = repository.NewPostRepository()
+var repo repository.PostRepository = repository.NewFirestoreRepository()
 
 func getPosts(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Content-Type", "application/json")
@@ -31,7 +31,7 @@ func addPost(response http.ResponseWriter, request *http.Request) {
 		response.Write([]byte(`{"error":"Error unmarshalling data"}`))
 		return
 	}
-	post.Id = rand.Int()
+	post.Id = rand.Int63()
 	repo.Save(&post)
 	response.WriteHeader(http.StatusOK)
 	result, err := json.Marshal(post)
